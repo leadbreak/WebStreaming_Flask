@@ -10,7 +10,7 @@ This is for the streaming images from webcam by Flask.
 / : default page \
 /streaming : video를 출력 \
 /capture : video 해당 장면을 capture해서 보여주고, 해당 이미지를 현재 작업 폴더의 capture.jpg로 저장 \
-/cat : capture의 테스트 페이지로 현재 폴더의 cat.jpg를 출력해서 보여줌 \
+/cat : capture의 테스트 페이지로 현재 폴더의 cat.jpg를 출력해서 보여줌 
 
 - 각 페이지는 templates 안의 html 파일과 연동되어 있음
 
