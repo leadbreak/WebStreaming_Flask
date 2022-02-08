@@ -14,3 +14,8 @@ This is for the streaming images from webcam by Flask.
 
 - 각 페이지는 templates 안의 html 파일과 연동되어 있음
 
+* Inference Streaming을 위한 code 추가
+ㄴpredimg.py : 한 장의 이미지를 추론
+ㄴdetectvideo.py : webcam 영상을 추론
+ㄴWebStreaming.py : 위까지의 작업물을 바탕으로 추론 route 추가
+  ㄴ./ckpt_data/yolov4-custom.tflite : 자체적으로 학습시킨 weights 파일 경로
