@@ -1,0 +1,5 @@
+classes = 3
+train = _custom_running/data/train.txt
+valid = _custom_running/data/train.txt
+names = _custom_running/data/obj.names
+backup = _custom_running/backup/
