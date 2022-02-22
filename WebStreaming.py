@@ -11,7 +11,7 @@
 - 각 페이지는 templates 안의 html 파일과 연동되어 있음
 """
 
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request
 import cv2, time, os
 import numpy as np
 
@@ -33,7 +33,8 @@ from tensorflow.compat.v1 import ConfigProto
 from tensorflow.compat.v1 import InteractiveSession
 
 app = Flask(__name__)
-camera = cv2.VideoCapture(0)
+# camera = cv2.VideoCapture(0)
+camera = cv2.VideoCapture("test.mp4")
 
 def get_anchors(anchors_path, tiny=False):
     anchors = np.array(anchors_path)
@@ -194,6 +195,7 @@ def generate_image() :
 
 @app.route('/') #root page
 def index() :
+    print(f"현재 작업 중인 ip : {request.remote_addr}")
     return render_template('index.html')
 
 @app.route('/cat')
@@ -230,5 +232,5 @@ if __name__=="__main__" :
     print()
 
     # app.run(host="172.30.1.54", port=5000, debug=False)
-    app.run(host="0.0.0.0", debug=False)
+    app.run(host="0.0.0.0", port=5000, debug=False)
     # app.run(port=5000, debug=False)
