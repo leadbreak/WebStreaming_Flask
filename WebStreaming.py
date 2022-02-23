@@ -33,8 +33,8 @@ from tensorflow.compat.v1 import ConfigProto
 from tensorflow.compat.v1 import InteractiveSession
 
 app = Flask(__name__)
-# camera = cv2.VideoCapture(0)
-camera = cv2.VideoCapture("test.mp4")
+camera = cv2.VideoCapture(0)
+# camera = cv2.VideoCapture("test.mp4")
 
 def get_anchors(anchors_path, tiny=False):
     anchors = np.array(anchors_path)
