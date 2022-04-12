@@ -11,7 +11,7 @@
 - 각 페이지는 templates 안의 html 파일과 연동되어 있음
 """
 
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request
 import cv2, time, os
 import numpy as np
 
@@ -80,8 +80,8 @@ def generate_inference_frames(FLAGS) :
     interpreter.allocate_tensors()
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
-    print(input_details)
-    print(output_details)
+    # print(input_details)
+    # print(output_details)
 
     frame_id = 0
     while True:
@@ -160,8 +160,8 @@ def generate_frames() :
                         b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
             if cnt < 1 :
-                print("return value : ", ret)
-                print("buffer :", buffer)
+                # print("return value : ", ret)
+                # print("buffer :", buffer)
                 # print("frame :", frame)  
                 cnt += 1
             # time.sleep(1)
@@ -194,6 +194,7 @@ def generate_image() :
 
 @app.route('/') #root page
 def index() :
+    print(f"ip address is... {request.remote_addr}:5000/")
     return render_template('index.html')
 
 @app.route('/cat')
@@ -202,6 +203,7 @@ def test_cat() :
 
 @app.route('/stream')
 def stream() :
+    print(f"ip address is... {request.environ['REMOTE_ADDR']}:5000/stream")
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
@@ -224,11 +226,12 @@ if __name__=="__main__" :
 
     # /mnt/c/Users/dqkim/capture.jpg
     print(f'capture 이미지 저장 위치 : {os.path.join(os.path.expanduser("~"), "capture.jpg")}')
-
+    
     print()
     print("="*80)
     print()
 
     # app.run(host="172.30.1.54", port=5000, debug=False)
-    app.run(host="0.0.0.0", debug=False)
+    app.run(debug=False)
     # app.run(port=5000, debug=False)
+    
