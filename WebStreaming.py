@@ -27,14 +27,38 @@ from core.config import cfg
 from core.yolov4 import filter_boxes
 from tensorflow.python.saved_model import tag_constants
 from PIL import Image
-import cv2
+import cv2, threading
 import numpy as np
 from tensorflow.compat.v1 import ConfigProto
 from tensorflow.compat.v1 import InteractiveSession
 
+class webCam :
+    def __init__(self, URL):
+        self.Frame = []
+        self.status = False
+        self.isstop = False
+		
+        self.capture = cv2.VideoCapture(URL)
+
+    def start(self):
+        print('webcam started!')
+        threading.Thread(target=self.read, daemon=True, args=()).start()
+
+    def stop(self):
+        self.isstop = True
+        print('webcam stopped!')
+   
+    def get(self):
+        return self.Frame
+        
+    def read(self):
+        self.status, self.Frame = self.capture.read()
+        return self.status, self.Frame
+        
+        self.capture.release()
+
 app = Flask(__name__)
-camera = cv2.VideoCapture(0)
-# camera = cv2.VideoCapture("test.mp4")
+camera = webCam(0)
 
 def get_anchors(anchors_path, tiny=False):
     anchors = np.array(anchors_path)
@@ -51,7 +75,11 @@ def read_class_names(class_file_name):
     return names
 
 # Inference in Flask server
-def generate_inference_frames(FLAGS) :
+def generate_inference_frames(FLAGS, mode=0) :
+    if mode == 0 :
+        camera = webCam(0)
+    else :
+        camera = webCam("test2.mp4")
     FLAGS_framework = "tflite"
     FLAGS_weights = "./ckpt_data/yolov4-custom.tflite"   
     FLAGS_size = 416
@@ -214,7 +242,13 @@ def capture() :
 
 @app.route('/inference')
 def inference() :
-    return Response(generate_inference_frames(FLAGS), mimetype='multipart/x-mixed-replace; boundary=frame')
+    inferece_option = 0
+    return Response(generate_inference_frames(FLAGS, mode=inferece_option), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/testbed')
+def testbed() :
+    inferece_option = 1
+    return Response(generate_inference_frames(FLAGS, mode=inferece_option), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__=="__main__" :
     """
